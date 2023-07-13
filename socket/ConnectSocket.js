@@ -10,7 +10,7 @@ function connectSocket(server) {
   });
 
   io.on("connection", (socket) => {
-    console.log("A client to socket connected having ID:", socket.id);
+    console.log("A user connected having ID:", socket.id);
   });
 }
 
