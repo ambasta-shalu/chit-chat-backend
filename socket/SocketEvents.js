@@ -26,4 +26,19 @@ function onJoinRoomEvent(data, socket, io) {
   }
 }
 
-module.exports = { onJoinRoomEvent };
+function onGetRoomUsersEvent(data, io) {
+  const room = io.sockets.adapter.rooms.get(data.ROOM_CODE);
+  if (room) {
+    const users = [];
+    room.forEach((socketId) => {
+      const socket = io.sockets.sockets.get(socketId);
+      if (socket && socket.data && socket.data.USER_NAME) {
+        users.push(socket.data.USER_NAME);
+      }
+    });
+    return users;
+  }
+  return [];
+}
+
+module.exports = { onJoinRoomEvent, onGetRoomUsersEvent };

@@ -1,5 +1,5 @@
 const socketIo = require("socket.io");
-const { onJoinRoomEvent } = require("./SocketEvents");
+const { onJoinRoomEvent, onGetRoomUsersEvent } = require("./SocketEvents");
 
 function connectSocket(server) {
   io = new socketIo.Server(server, {
@@ -21,6 +21,12 @@ function connectSocket(server) {
     // Message
     socket.on("sendMessageEvent", (data) => {
       io.to(data.ROOM_CODE).emit("receiveMessageEvent", data);
+    });
+
+    // Room User Details
+    socket.on("getRoomUsersEvent", (data) => {
+      const roomUsers = onGetRoomUsersEvent(data, io);
+      socket.emit("receiveRoomUsersEvent", roomUsers);
     });
 
     socket.on("disconnect", () => {
