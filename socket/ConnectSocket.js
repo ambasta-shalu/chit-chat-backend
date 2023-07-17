@@ -29,6 +29,16 @@ function connectSocket(server) {
       socket.emit("receiveRoomUsersEvent", roomUsers);
     });
 
+    // Start Typing Event
+    socket.on("sendStartTypingEvent", (data) => {
+      socket.to(data.ROOM_CODE).emit("getStartTypingEvent", data.USER_NAME);
+    });
+
+    // Stop Typing Event
+    socket.on("sendStopTypingEvent", (data) => {
+      socket.to(data.ROOM_CODE).emit("getStopTypingEvent", data.USER_NAME);
+    });
+
     // Disconnect
     socket.on("disconnect", () => {
       console.log("A user disconnected having ID:", socket.id);
