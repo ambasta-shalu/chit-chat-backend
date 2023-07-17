@@ -29,6 +29,7 @@ function connectSocket(server) {
       socket.emit("receiveRoomUsersEvent", roomUsers);
     });
 
+    // Disconnect
     socket.on("disconnect", () => {
       console.log("A user disconnected having ID:", socket.id);
     });

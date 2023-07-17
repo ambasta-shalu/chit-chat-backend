@@ -16,6 +16,10 @@ function onJoinRoomEvent(data, socket, io) {
       socket
         .to(data.ROOM_CODE)
         .emit("toastEvent", `${data.USER_NAME} has Joined the Room`);
+
+      const roomUsers = onGetRoomUsersEvent(data, io);
+      socket.to(data.ROOM_CODE).emit("receiveRoomUsersEvent", roomUsers);
+
       socket.emit("toastEvent", `Welcome to Chit Chat ${data.USER_NAME} !`);
     } else {
       socket.emit(
