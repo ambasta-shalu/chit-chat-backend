@@ -3,6 +3,8 @@ function onJoinRoomEvent(data, socket, io) {
     // user join in new room
     socket.join(data.ROOM_CODE);
     socket.data.USER_NAME = data.USER_NAME; // Save the USER_NAME in socket.data
+    socket.data.USER_ID = data.USER_ID; // Save the USER_ID in socket.data
+
     socket.emit("toastEvent", `Welcome to Chit Chat ${data.USER_NAME} !`);
   } else {
     // user join in existing room
@@ -13,6 +15,7 @@ function onJoinRoomEvent(data, socket, io) {
     if (roomExists) {
       socket.join(data.ROOM_CODE);
       socket.data.USER_NAME = data.USER_NAME; // Save the USER_NAME in socket.data
+      socket.data.USER_ID = data.USER_ID; // Save the USER_ID in socket.data
       socket
         .to(data.ROOM_CODE)
         .emit("toastEvent", `${data.USER_NAME} has Joined the Room`);
@@ -36,8 +39,13 @@ function onGetRoomUsersEvent(data, io) {
     const users = [];
     room.forEach((socketId) => {
       const socket = io.sockets.sockets.get(socketId);
-      if (socket && socket.data && socket.data.USER_NAME) {
-        users.push(socket.data.USER_NAME);
+      if (
+        socket &&
+        socket.data &&
+        socket.data.USER_NAME &&
+        socket.data.USER_ID
+      ) {
+        users.push([socket.data.USER_NAME, socket.data.USER_ID]);
       }
     });
     return users;

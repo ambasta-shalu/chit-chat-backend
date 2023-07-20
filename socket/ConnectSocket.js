@@ -23,9 +23,9 @@ function connectSocket(server) {
       io.to(data.ROOM_CODE).emit("receiveMessageEvent", data);
     });
 
-    // Room User Details
+    // Room User Details [USER_NAME, USER_ID]
     socket.on("getRoomUsersEvent", (data) => {
-      const roomUsers = onGetRoomUsersEvent(data, io);
+      const roomUsers = onGetRoomUsersEvent(data, io); // list of [USER_NAME, USER_ID]
       socket.emit("receiveRoomUsersEvent", roomUsers);
     });
 
