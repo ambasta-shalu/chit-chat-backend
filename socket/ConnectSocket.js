@@ -39,6 +39,13 @@ function connectSocket(server) {
       socket.to(data.ROOM_CODE).emit("getStopTypingEvent", data.USER_NAME);
     });
 
+    // File Input Event
+    socket.on("sendFileEvent", (data) => {
+      const file = data.file;
+      console.log(`file get ${file}`);
+      io.to(data.ROOM_CODE).emit("receiveFileEvent", file);
+    });
+
     // Disconnect
     socket.on("disconnect", () => {
       console.log("A user disconnected having ID:", socket.id);
