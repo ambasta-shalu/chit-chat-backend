@@ -11,7 +11,7 @@ function connectSocket(server) {
   });
 
   io.on("connection", (socket) => {
-    console.log("A user connected having ID:", socket.id);
+    console.log(`A user connected having ID : ${socket.id}`);
 
     // Joining the Room
     socket.on("joinRoomEvent", (data) => {
@@ -37,13 +37,6 @@ function connectSocket(server) {
     // Stop Typing Event
     socket.on("sendStopTypingEvent", (data) => {
       socket.to(data.ROOM_CODE).emit("getStopTypingEvent", data.USER_NAME);
-    });
-
-    // File Input Event
-    socket.on("sendFileEvent", (data) => {
-      const file = data.file;
-      console.log(`file get ${file}`);
-      io.to(data.ROOM_CODE).emit("receiveFileEvent", file);
     });
 
     // Disconnect

@@ -21,7 +21,7 @@ app.use(checkHealthRoute);
 // server started
 server.listen(port, (error) => {
   if (!error) {
-    console.log(`Server Listening on Port ${port} `);
+    console.log(`Server Listening on Port ${port}`);
   } else {
     console.log(`Error Occured : ${error}`);
   }
