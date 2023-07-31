@@ -1,5 +1,6 @@
 const socketIo = require("socket.io");
 const { onJoinRoomEvent, onGetRoomUsersEvent } = require("./SocketEvents");
+const { fileUpload } = require("../helper/FileUpload");
 
 function connectSocket(server) {
   io = new socketIo.Server(server, {
@@ -20,6 +21,9 @@ function connectSocket(server) {
 
     // Message
     socket.on("sendMessageEvent", (data) => {
+      if (data.TYPE === "FILE") {
+        fileUpload(data);
+      }
       io.to(data.ROOM_CODE).emit("receiveMessageEvent", data);
     });
 

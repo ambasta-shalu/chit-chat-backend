@@ -4,6 +4,7 @@ const cors = require("cors");
 const http = require("http");
 
 const checkHealthRoute = require("./routes/CheckHealthRoute");
+const fileDownloadRoute = require("./routes/FileDownloadRoute");
 const { connectSocket } = require("./socket/ConnectSocket");
 
 const app = express();
@@ -17,6 +18,7 @@ app.disable("x-powered-by");
 
 // routes
 app.use(checkHealthRoute);
+app.use(fileDownloadRoute);
 
 // server started
 server.listen(port, (error) => {
