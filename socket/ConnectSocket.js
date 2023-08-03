@@ -21,14 +21,14 @@ function connectSocket(server) {
 
     // Message
     socket.on("sendMessageEvent", (data) => {
-      if (data.TYPE === "FILE") {
+      if (data.TYPE === "MESSAGE") {
+        // Broadcasts the message to all clients connected to the specified room, except the sender.
+        socket.to(data.ROOM_CODE).emit("receiveMessageEvent", data);
+      } else {
         fileUpload(data);
         // Broadcasts the message to all clients connected to the specified room
         // across the entire Socket.IO server, including the sender
         io.to(data.ROOM_CODE).emit("receiveMessageEvent", data);
-      } else {
-        // Broadcasts the message to all clients connected to the specified room, except the sender.
-        socket.to(data.ROOM_CODE).emit("receiveMessageEvent", data);
       }
     });
 
