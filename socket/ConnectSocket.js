@@ -9,6 +9,7 @@ function connectSocket(server) {
       methods: ["GET", "POST"],
       credentials: true,
     },
+    maxHttpBufferSize: 50 * 1024 * 1024, // Set the maximum HTTP request size to 50 MB (50 * 1024 * 1024 bytes)
   });
 
   io.on("connection", (socket) => {
