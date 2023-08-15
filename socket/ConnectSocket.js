@@ -9,7 +9,9 @@ function connectSocket(server) {
       methods: ["GET", "POST"],
       credentials: true,
     },
-    maxHttpBufferSize: 50 * 1024 * 1024, // Set the maximum HTTP request size to 50 MB (50 * 1024 * 1024 bytes)
+
+    // Set the maximum HTTP request size to 100 MB (100 * 1024 * 1024 bytes)
+    maxHttpBufferSize: 100 * 1024 * 1024,
   });
 
   io.on("connection", (socket) => {
@@ -35,6 +37,7 @@ function connectSocket(server) {
 
     // Room User Details [USER_NAME, USER_ID]
     socket.on("getRoomUsersEvent", (data) => {
+      // Update Room User Details
       const roomUsers = onGetRoomUsersEvent(data, io); // list of [USER_NAME, USER_ID]
       socket.emit("receiveRoomUsersEvent", roomUsers);
     });

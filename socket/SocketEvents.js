@@ -20,10 +20,27 @@ function onJoinRoomEvent(data, socket, io) {
         .to(data.ROOM_CODE)
         .emit("toastEvent", `${data.USER_NAME} has Joined the Room`);
 
-      const roomUsers = onGetRoomUsersEvent(data, io);
+      // Update Room User Details
+      let roomUsers = onGetRoomUsersEvent(data, io);
       socket.to(data.ROOM_CODE).emit("receiveRoomUsersEvent", roomUsers);
 
       socket.emit("toastEvent", `Welcome to Chit Chat ${data.USER_NAME} !`);
+
+      // Emit toast event when user leaves the room
+      socket.on("disconnecting", () => {
+        const disconnectedUser = roomUsers.find(
+          (user) => user[1] === socket.data.USER_ID
+        );
+        if (disconnectedUser) {
+          socket
+            .to(data.ROOM_CODE)
+            .emit("toastEvent", `${socket.data.USER_NAME} has left the Room`);
+        }
+
+        // Update Room User Details and exclude the disconnected user
+        roomUsers = onGetRoomUsersEvent(data, io, socket.data.USER_ID);
+        socket.to(data.ROOM_CODE).emit("receiveRoomUsersEvent", roomUsers);
+      });
     } else {
       socket.emit(
         "errorEvent",
@@ -33,7 +50,7 @@ function onJoinRoomEvent(data, socket, io) {
   }
 }
 
-function onGetRoomUsersEvent(data, io) {
+function onGetRoomUsersEvent(data, io, excludeUserId = null) {
   const room = io.sockets.adapter.rooms.get(data.ROOM_CODE);
   if (room) {
     const users = [];
@@ -43,7 +60,8 @@ function onGetRoomUsersEvent(data, io) {
         socket &&
         socket.data &&
         socket.data.USER_NAME &&
-        socket.data.USER_ID
+        socket.data.USER_ID &&
+        socket.data.USER_ID !== excludeUserId
       ) {
         users.push([socket.data.USER_NAME, socket.data.USER_ID]);
       }
