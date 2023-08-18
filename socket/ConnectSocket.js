@@ -1,6 +1,7 @@
 const socketIo = require("socket.io");
 const { onJoinRoomEvent, onGetRoomUsersEvent } = require("./SocketEvents");
 const { fileUpload } = require("../helper/FileUpload");
+const { deleteScheduler } = require("../helper/DeleteScheduler");
 
 function connectSocket(server) {
   io = new socketIo.Server(server, {
@@ -28,10 +29,14 @@ function connectSocket(server) {
         // Broadcasts the message to all clients connected to the specified room, except the sender.
         socket.to(data.ROOM_CODE).emit("receiveMessageEvent", data);
       } else {
+        // Call the file upload function
         fileUpload(data);
-        // Broadcasts the message to all clients connected to the specified room
-        // across the entire Socket.IO server, including the sender
-        io.to(data.ROOM_CODE).emit("receiveMessageEvent", data);
+
+        // Call the schedule deletion function
+        deleteScheduler(data);
+
+        // Broadcasts the message to all clients connected to the specified room, except the sender.
+        socket.to(data.ROOM_CODE).emit("receiveMessageEvent", data);
       }
     });
 

@@ -8,10 +8,17 @@ function fileUpload(data) {
   // Creating a unique filename based on current time and the original filename
   const uniqueFileName = `${Date.now()}-${data.CONTENT_NAME}`;
 
-  const uploadsDir = path.join(__dirname, "../uploads");
+  const uploadsDir = path.join(__dirname, `../uploads/${data.ROOM_CODE}`);
 
-  if (!fs.existsSync(uploadsDir)) {
-    fs.mkdirSync(uploadsDir);
+  // if (!fs.existsSync(uploadsDir)) {
+  //   fs.mkdirSync(uploadsDir);
+  // }
+
+  try {
+    fs.mkdirSync(uploadsDir, { recursive: true }); // Create directories recursively
+  } catch (error) {
+    console.error("Error creating directories:", error);
+    return; // Return or handle the error appropriately
   }
 
   const filePath = path.join(uploadsDir, uniqueFileName);

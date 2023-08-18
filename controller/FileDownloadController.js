@@ -1,11 +1,12 @@
 const path = require("path");
 const fs = require("fs");
 
-const uploadsDir = path.resolve(__dirname, "../uploads");
-
 async function fileDownload(req, res) {
   try {
     const { filename } = req.params;
+    const ROOM_CODE = req.query.ROOM_CODE;
+
+    const uploadsDir = path.resolve(__dirname, `../uploads/${ROOM_CODE}`);
     const filePath = path.join(uploadsDir, filename);
 
     // Check if the file exists
