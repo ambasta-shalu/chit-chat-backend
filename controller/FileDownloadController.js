@@ -13,7 +13,7 @@ async function fileDownload(req, res) {
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({
         status: 404,
-        message: "File not found 😐",
+        message: "File does not exist 😐",
       });
     }
 
