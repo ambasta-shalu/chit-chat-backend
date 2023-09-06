@@ -1,9 +1,9 @@
 function onJoinRoomEvent(data, socket, io) {
   if (data.IS_NEW_ROOM) {
-    // user join in new room
+    // USER JOIN IN NEW ROOM
     socket.join(data.ROOM_CODE);
-    socket.data.USER_NAME = data.USER_NAME; // Save the USER_NAME in socket.data
-    socket.data.USER_ID = data.USER_ID; // Save the USER_ID in socket.data
+    socket.data.USER_NAME = data.USER_NAME; // SAVE THE USER_NAME IN SOCKET.DATA
+    socket.data.USER_ID = data.USER_ID; // SAVE THE USER_ID IN SOCKET.DATA
 
     socket.emit("toastEvent", `Welcome to Chit Chat ${data.USER_NAME} !`);
   } else {
@@ -14,19 +14,19 @@ function onJoinRoomEvent(data, socket, io) {
 
     if (roomExists) {
       socket.join(data.ROOM_CODE);
-      socket.data.USER_NAME = data.USER_NAME; // Save the USER_NAME in socket.data
-      socket.data.USER_ID = data.USER_ID; // Save the USER_ID in socket.data
+      socket.data.USER_NAME = data.USER_NAME; // SAVE THE USER_NAME IN SOCKET.DATA
+      socket.data.USER_ID = data.USER_ID; // SAVE THE USER_ID IN SOCKET.DATA
       socket
         .to(data.ROOM_CODE)
         .emit("toastEvent", `${data.USER_NAME} has Joined the Room`);
 
-      // Update Room User Details
+      // UPDATE ROOM USER DETAILS
       let roomUsers = onGetRoomUsersEvent(data, io);
       socket.to(data.ROOM_CODE).emit("receiveRoomUsersEvent", roomUsers);
 
       socket.emit("toastEvent", `Welcome to Chit Chat ${data.USER_NAME} !`);
 
-      // Emit toast event when user leaves the room
+      // EMIT TOAST EVENT WHEN USER LEAVES THE ROOM
       socket.on("disconnecting", () => {
         const disconnectedUser = roomUsers.find(
           (user) => user[1] === socket.data.USER_ID
@@ -37,7 +37,7 @@ function onJoinRoomEvent(data, socket, io) {
             .emit("toastEvent", `${socket.data.USER_NAME} has left the Room`);
         }
 
-        // Update Room User Details and exclude the disconnected user
+        // UPDATE ROOM USER DETAILS AND EXCLUDE THE DISCONNECTED USER
         roomUsers = onGetRoomUsersEvent(data, io, socket.data.USER_ID);
         socket.to(data.ROOM_CODE).emit("receiveRoomUsersEvent", roomUsers);
       });

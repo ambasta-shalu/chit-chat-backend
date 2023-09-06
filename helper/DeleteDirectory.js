@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-// Delete a directory and its contents recursively
+// DELETE A DIRECTORY AND ITS CONTENTS RECURSIVELY
 function deleteDirectory(directoryPath) {
   if (fs.existsSync(directoryPath)) {
     const files = fs.readdirSync(directoryPath);
@@ -9,13 +9,13 @@ function deleteDirectory(directoryPath) {
     for (const file of files) {
       const filePath = path.join(directoryPath, file);
       if (fs.lstatSync(filePath).isDirectory()) {
-        deleteDirectory(filePath); // Recursive call for subdirectories
+        deleteDirectory(filePath); // RECURSIVE CALL FOR SUBDIRECTORIES
       } else {
-        fs.unlinkSync(filePath); // Delete file
+        fs.unlinkSync(filePath); // DELETE FILE
       }
     }
 
-    fs.rmdirSync(directoryPath); // Delete empty directory
+    fs.rmdirSync(directoryPath); // DELETE EMPTY DIRECTORY
   }
 }
 

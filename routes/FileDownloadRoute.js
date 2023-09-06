@@ -1,7 +1,7 @@
 const express = require("express");
 const { fileDownload } = require("../controller/FileDownloadController");
 
-// creating express route handler
+// CREATING EXPRESS ROUTE HANDLER
 const router = express.Router();
 
 router.get("/download/:filename", fileDownload);

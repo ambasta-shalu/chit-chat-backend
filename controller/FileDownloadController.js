@@ -9,7 +9,7 @@ async function fileDownload(req, res) {
     const uploadsDir = path.resolve(__dirname, `../uploads/${ROOM_CODE}`);
     const filePath = path.join(uploadsDir, filename);
 
-    // Check if the file exists
+    // CHECK IF THE FILE EXISTS
     if (!fs.existsSync(filePath)) {
       return res.status(404).json({
         status: 404,
@@ -17,10 +17,10 @@ async function fileDownload(req, res) {
       });
     }
 
-    // Send the file as a response
+    // SEND THE FILE AS A RESPONSE
     res.download(filePath);
   } catch (error) {
-    // exception handler
+    // EXCEPTION HANDLER
     console.error(error);
     return res.status(500).json({
       status: 500,

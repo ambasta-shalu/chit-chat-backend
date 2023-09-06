@@ -11,53 +11,53 @@ function connectSocket(server) {
       credentials: true,
     },
 
-    // Set the maximum HTTP request size to 100 MB (100 * 1024 * 1024 bytes)
+    // SET THE MAXIMUM HTTP REQUEST SIZE TO 100 MB (100 * 1024 * 1024 BYTES)
     maxHttpBufferSize: 100 * 1024 * 1024,
   });
 
   io.on("connection", (socket) => {
     console.log(`A user connected having ID : ${socket.id}`);
 
-    // Joining the Room
+    // JOINING THE ROOM
     socket.on("joinRoomEvent", (data) => {
       onJoinRoomEvent(data, socket, io);
     });
 
-    // Message
+    // MESSAGE
     socket.on("sendMessageEvent", (data) => {
       if (data.TYPE === "MESSAGE") {
-        // Broadcasts the message to all clients connected to the specified room, except the sender.
+        // BROADCASTS THE MESSAGE TO ALL CLIENTS CONNECTED TO THE SPECIFIED ROOM, EXCEPT THE SENDER.
         socket.to(data.ROOM_CODE).emit("receiveMessageEvent", data);
       } else {
-        // Call the file upload function
+        // CALL THE FILE UPLOAD FUNCTION
         fileUpload(data);
 
-        // Call the schedule deletion function
+        // CALL THE SCHEDULE DELETION FUNCTION
         deleteScheduler(data);
 
-        // Broadcasts the message to all clients connected to the specified room, except the sender.
+        // BROADCASTS THE MESSAGE TO ALL CLIENTS CONNECTED TO THE SPECIFIED ROOM, EXCEPT THE SENDER.
         socket.to(data.ROOM_CODE).emit("receiveMessageEvent", data);
       }
     });
 
-    // Room User Details [USER_NAME, USER_ID]
+    // ROOM USER DETAILS: [USER_NAME, USER_ID]
     socket.on("getRoomUsersEvent", (data) => {
-      // Update Room User Details
-      const roomUsers = onGetRoomUsersEvent(data, io); // list of [USER_NAME, USER_ID]
+      // UPDATE ROOM USER DETAILS
+      const roomUsers = onGetRoomUsersEvent(data, io); // LIST OF [USER_NAME, USER_ID]
       socket.emit("receiveRoomUsersEvent", roomUsers);
     });
 
-    // Start Typing Event
+    // START TYPING EVENT
     socket.on("sendStartTypingEvent", (data) => {
       socket.to(data.ROOM_CODE).emit("getStartTypingEvent", data);
     });
 
-    // Stop Typing Event
+    // STOP TYPING EVENT
     socket.on("sendStopTypingEvent", (data) => {
       socket.to(data.ROOM_CODE).emit("getStopTypingEvent", data);
     });
 
-    // Disconnect
+    // DISCONNECT
     socket.on("disconnect", () => {
       console.log("A user disconnected having ID:", socket.id);
     });

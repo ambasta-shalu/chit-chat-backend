@@ -6,11 +6,11 @@ function getSubfolderPath(roomCode) {
   return subfolderPath;
 }
 
-// Function to schedule deletion after 2 hours
+// FUNCTION TO SCHEDULE DELETION AFTER 2 HOURS
 function deleteScheduler(data) {
   const subfolderPath = getSubfolderPath(data.ROOM_CODE);
 
-  const twoHours = 2 * 60 * 60 * 1000; // 2 hours in milliseconds
+  const twoHours = 2 * 60 * 60 * 1000; // 2 HOURS IN MILLISECONDS
 
   setTimeout(() => {
     deleteDirectory(subfolderPath);

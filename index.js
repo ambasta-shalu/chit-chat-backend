@@ -11,16 +11,16 @@ const app = express();
 const server = http.createServer(app);
 const port = process.env.PORT || 7000;
 
-// middleware
+// MIDDLEWARE
 app.use(cors());
 app.use(express.json());
 app.disable("x-powered-by");
 
-// routes
+// ROUTES
 app.use(checkHealthRoute);
 app.use(fileDownloadRoute);
 
-// server started
+// SERVER STARTED
 server.listen(port, (error) => {
   if (!error) {
     console.log(`Server Listening on Port ${port}`);
@@ -29,5 +29,5 @@ server.listen(port, (error) => {
   }
 });
 
-// socket initialized
+// SOCKET INITIALIZED
 connectSocket(server);
